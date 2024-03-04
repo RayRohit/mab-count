@@ -54,15 +54,15 @@ export default function DisplayCam() {
     {
       id: 0,
       image: videoloss,
-      // camUrl: "http://192.168.1.56:5000/video_feed/0",
-      camUrl: videoloss,
+      camUrl: "http://192.168.1.56:5000/video_feed/1",
+      // camUrl: videoloss,
       camName: "Camera 01",
     },
     {
       id: 1,
       image: videoloss,
-      // camUrl: "http://192.168.1.56:5000/video_feed/1",
-      camUrl: videoloss,
+      camUrl: "http://192.168.1.56:5000/video_feed/2",
+      // camUrl: videoloss,
       camName: "Camera 02",
     },
     {
