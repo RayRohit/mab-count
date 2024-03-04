@@ -213,6 +213,31 @@ export default function DisplayCam() {
           })}
         </Grid>
       </Paper>
+      <Paper
+        elevation={3}
+        sx={{
+          position: matches ? "absolute" : "sticky",
+          bottom: 0,
+          width: "100%",
+          py: 0.1,
+          borderRadius: 0,
+          textAlign: "right",
+        }}
+      >
+        <Typography variant="h6" sx={{ fontSize: "14px", fontWeight: "bold" }}>
+          © 2024 Copyright{" "}
+          <a
+            style={{
+              textDecoration: "none",
+              color: "black",
+              paddingRight: "5px",
+            }}
+            href="https://navajna.com/"
+          >
+            , Navajna Technologies. All rights reserved.
+          </a>{" "}
+        </Typography>
+      </Paper>
     </Box>
   );
 }
