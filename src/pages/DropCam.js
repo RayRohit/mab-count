@@ -24,51 +24,75 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 export default function DropCam() {
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/jsondata");
+        const filePath = response.data.file_path;
+
+        const dataResponse = await axios.get(
+          `http://127.0.0.1:5000/${filePath}`
+        );
+
+        setData(dataResponse.data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [data]);
   const cardData = [
     {
       id: 0,
       image: entry,
       title: "Entry Count",
-      count: 0,
+      count: data[0]?.Entry_Data,
     },
     {
       id: 1,
       image: exit,
       title: "Exit Count",
-      count: 0,
+      count: data[0]?.Exit_Data,
     },
     {
       id: 2,
       image: totalCount,
       title: "Total Count",
-      count: 0,
+      count: data[0]?.Total_count,
     },
   ];
   const camData = [
     {
       id: 0,
       image: videoloss,
-      camUrl: "http://192.168.1.56:5000/video_feed/1",
+      camUrl: "http://127.0.0.1:5000/video_feed/0",
       //   camUrl: videoloss,
       camName: "Camera 01",
     },
     {
       id: 1,
       image: videoloss,
-      camUrl: "http://192.168.1.56:5000/video_feed/2",
+      camUrl: "http://127.0.0.1:5000/video_feed/1",
       //   camUrl: videoloss,
       camName: "Camera 02",
     },
     {
       id: 2,
       image: videoloss,
-      camUrl: videoloss,
+      camUrl: "http://127.0.0.1:5000/video_feed/2",
+
       camName: "Camera 03",
     },
     {
       id: 3,
       image: videoloss,
-      camUrl: "http://192.168.1.56:5000/video_feed/1",
+      camUrl: "http://127.0.0.1:5000/video_feed/3",
 
       camName: "Camera 04",
     },
@@ -82,7 +106,7 @@ export default function DropCam() {
     {
       id: 5,
       image: videoloss,
-      camUrl: "http://192.168.1.56:5000/video_feed/2",
+      camUrl: "http://127.0.0.1:5000/video_feed/2",
 
       camName: "Camera 06",
     },
@@ -115,10 +139,6 @@ export default function DropCam() {
   const matches = useMediaQuery(theme.breakpoints.up("xl"));
   const [selectedCamera, setSelectedCamera] = useState(camData[0]);
 
-  //   useEffect(() => {
-  //     const url = "";
-  //     axios.get("url");
-  //   }, []);
   const handleImageError = () => {
     setIsError(true);
   };
