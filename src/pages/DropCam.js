@@ -447,6 +447,10 @@ export default function DropCam() {
                         src={selectedCamera.camUrl}
                         alt="video feed"
                         onError={handleImageError}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
                       />
                     )}
                   </Box>
