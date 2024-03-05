@@ -25,46 +25,43 @@ export default function DropCam() {
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState(false);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:5000/jsondata");
-        const filePath = response.data.file_path;
-
-        const dataResponse = await axios.get(
-          `http://127.0.0.1:5000/${filePath}`
-        );
-
-        setData(dataResponse.data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    const intervalId = setInterval(() => {
-      fetchData();
+    setInterval(() => {
+      ServerCall();
     }, 1000);
+  }, []);
 
-    return () => clearInterval(intervalId);
-  }, [data]);
+  async function ServerCall() {
+    try {
+      const response = await axios.get("http://127.0.0.1:5000/jsondata");
+      const filePath = response.data.file_path;
+
+      const dataResponse = await axios.get(`http://127.0.0.1:5000/${filePath}`);
+
+      setData(dataResponse.data);
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
   const cardData = [
     {
       id: 0,
       image: entry,
       title: "Entry Count",
-      count: data[0]?.Entry_Data,
+      count: data.length !== 0 ? data[0]?.Entry_Data : 0,
     },
     {
       id: 1,
       image: exit,
       title: "Exit Count",
-      count: data[0]?.Exit_Data,
+      count: data.length !== 0 ? data[0]?.Exit_Data : 0,
     },
     {
       id: 2,
       image: totalCount,
       title: "Total Count",
-      count: data[0]?.Total_count,
+      count: data.length !== 0 ? data[0]?.Total_count : 0,
     },
   ];
   const camData = [
@@ -290,14 +287,18 @@ export default function DropCam() {
                         alt="video feed"
                         style={{
                           width: "100%",
-                          height: "100%",
+                          height: "400px",
                         }}
                       />
                     ) : (
                       <img
-                        src={selectedCamera.camUrl}
+                        src={isError ? videoloss : selectedCamera.camUrl}
                         alt="video feed"
                         onError={handleImageError}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
                       />
                     )}
                   </Box>
@@ -438,7 +439,7 @@ export default function DropCam() {
                         alt="video feed"
                         style={{
                           width: "100%",
-                          height: "100%",
+                          height: "400px",
                         }}
                       />
                     ) : (
@@ -455,32 +456,6 @@ export default function DropCam() {
           </Box>
         </>
       )}
-
-      <Paper
-        elevation={3}
-        sx={{
-          position: matches ? "absolute" : "sticky",
-          bottom: 0,
-          width: "100%",
-          py: 0.1,
-          borderRadius: 0,
-          textAlign: "right",
-        }}
-      >
-        <Typography variant="h6" sx={{ fontSize: "14px", fontWeight: "bold" }}>
-          © 2024 Copyright{" "}
-          <a
-            style={{
-              textDecoration: "none",
-              color: "black",
-              paddingRight: "5px",
-            }}
-            href="https://navajna.com/"
-          >
-            , Navajna Technologies. All rights reserved.
-          </a>{" "}
-        </Typography>
-      </Paper>
     </Box>
   );
 }
